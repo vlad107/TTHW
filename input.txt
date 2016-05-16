@@ -1,0 +1,2 @@
+  \a.\b.a b c (\d.e \f.g) h01gasd[c:=a]
+\a.b
