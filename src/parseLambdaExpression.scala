@@ -1,3 +1,5 @@
+import scala.util.parsing.combinator.RegexParsers
+
 /**
   * Created by vlad107 on 16.05.16.
   */

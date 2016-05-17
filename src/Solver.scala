@@ -5,8 +5,15 @@
 class LambdaParserException(rem: String) extends Exception {
   override def getMessage: String = "Ошибка в парсере, остаток: " + rem
 }
+class TermParserException(rem: String) extends Exception {
+  override def getMessage: String = "Ошибка в парсере, остаток: " + rem
+}
 class SubstitutionException(varName: String) extends Exception {
   override def getMessage: String = "Нет свободы для подстановки для переменной " + varName
+}
+
+class UnificationException() extends Exception {
+  override def getMessage: String = "Система не разрешима"
 }
 
 object Solver {
@@ -18,13 +25,14 @@ object Solver {
       case "2" => new HW2(args(1), args(2))
       case "3" => new HW3(args(1), args(2))
       case "4" => new HW4(args(1), args(2))
-      case "5" => println("Fifth task")
+      case "5" => new HW5(args(1), args(2))
       case "6" => println("Sixth task")
       case _ => throw new IndexOutOfBoundsException()
     }
   } catch {
-    case _:IndexOutOfBoundsException => System.err.println(USAGE)
-    case e:LambdaParserException => System.err.println(e.getMessage)
-    case e:SubstitutionException => System.err.println(e.getMessage)
+    case _: IndexOutOfBoundsException => System.err.println(USAGE)
+    case e: LambdaParserException => System.err.println(e.getMessage)
+    case e: SubstitutionException => System.err.println(e.getMessage)
+    case e: UnificationException => System.err.println(e.getMessage)
   }
 }
