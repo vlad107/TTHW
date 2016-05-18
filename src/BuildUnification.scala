@@ -5,7 +5,6 @@ import scala.collection.mutable
   */
 class BuildUnification(eqs: List[(TermExpression, TermExpression)]) {
   var result = mutable.Map.empty[String, TermExpression]
-  var substs = mutable.LinkedList.empty[(String, TermExpression)]
   override def toString: String = result.toList.map{case (name, expr) => name + "=" + expr}.mkString("\n")
   var queue = mutable.Queue.empty[(TermExpression, TermExpression)]
   queue ++= eqs

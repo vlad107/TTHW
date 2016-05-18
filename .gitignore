@@ -1,5 +1,3 @@
 *.class
-.idea
-*.impl
 input.txt
 output.txt

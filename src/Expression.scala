@@ -16,13 +16,13 @@ case class VarExpr(name: String) extends Expression {
   override def substitute(varName: String, expr: Expression, bound: Set[String]): Expression = {
     if (varName.equals(name)) {
       val inter = bound & expr.getFreeVariables
-      if (inter.nonEmpty) throw new SubstitutionException(inter.head)
+//      if (inter.nonEmpty) throw new SubstitutionException(inter.head)
       expr
     } else new VarExpr(name)
   }
 
   override def normalize(cache: scala.collection.mutable.Map[String, Expression], untilNotLambda: Boolean = false): Expression = {
-    if (!cache.contains(toString)) cache += (name -> new VarExpr(name))
+    if (!cache.contains(toString)) cache.put(name, new VarExpr(name))
     cache.get(name).get
   }
 }
@@ -53,9 +53,8 @@ case class LambdaExpr(param: String, func: Expression) extends Expression {
   override def toString = "(" + "\\" + param + "." + func + ")"
   override def getFreeVariables = func.getFreeVariables - param
 
-  override def substitute(varName: String, expr: Expression, bound: Set[String]): Expression = varName match {
-    case `param` => new LambdaExpr(param, func)
-    case _ => new LambdaExpr(param, func.substitute(varName, expr, bound + param))
+  override def substitute(varName: String, expr: Expression, bound: Set[String]): Expression = {
+    if (varName.equals(param)) new LambdaExpr(param, func) else new LambdaExpr(param, func.substitute(varName, expr, bound + param))
   }
 
 
