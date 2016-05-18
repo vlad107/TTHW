@@ -13,7 +13,7 @@ case class TermFunc(name: String, args: List[TermExpression]) extends TermExpres
 }
 
 case class TermVar(name: String) extends TermExpression {
-  override def substitute(name: String, expr: TermExpression) = if (name.equals(this.name)) expr else this
+  override def substitute(name: String, expr: TermExpression) = if (name.equals(this.name)) expr else new TermVar(name)
   override def contains(name: String) = name.equals(this.name)
   override def toString: String = name
 }

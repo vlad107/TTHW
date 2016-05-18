@@ -41,7 +41,7 @@ case class AppExpr(func: Expression, arg: Expression) extends Expression {
       val newFunc = func.normalize(cache, untilNotLambda = true)
       val newExpr = newFunc match {
         case lambda: LambdaExpr => lambda.apply(arg).normalize(cache, untilNotLambda)
-        case _ => new AppExpr(newFunc.normalize(cache), if (untilNotLambda) arg else arg.normalize(cache))
+        case _ => new AppExpr(newFunc.normalize(cache), arg.normalize(cache))
       }
       cache += (name -> newExpr)
     }

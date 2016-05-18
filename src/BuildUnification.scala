@@ -10,6 +10,7 @@ class BuildUnification(eqs: List[(TermExpression, TermExpression)]) {
   queue ++= eqs
   while (queue.nonEmpty) {
     val (term1, term2) = queue.dequeue
+    System.err.println(term1.toString + " = " + term2.toString)
     (term1, term2) match {
       case (x: TermFunc, y: TermFunc) =>
         if (!x.name.equals(y.name)) throw new UnificationException
@@ -19,9 +20,14 @@ class BuildUnification(eqs: List[(TermExpression, TermExpression)]) {
           case None =>
             var updatedY = y
             for ((p, v) <- result) updatedY = updatedY.substitute(p, v)
-            if (updatedY.contains(x.name)) throw new UnificationException
-            result.put(x.name, updatedY)
-          case Some(z) => queue += Tuple2(y, z)
+            updatedY match {
+              case _:TermFunc =>
+                if (updatedY.contains(x.name)) throw new UnificationException
+                result.put(x.name, updatedY)
+              case _:TermVar =>
+                if (!updatedY.toString.equals(x.toString)) result.put(x.name, updatedY)
+            }
+          case Some(z) => if (!y.toString.equals(z.toString)) queue += Tuple2(y, z)
         }
       case (x: TermExpression, y: TermVar) => queue += Tuple2(y, x)
     }
